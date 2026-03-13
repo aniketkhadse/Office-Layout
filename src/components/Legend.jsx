@@ -1,0 +1,21 @@
+function Legend({ roomLabel, occupiedCount, availableCount }) {
+  return (
+    <section className="legend" aria-label={`${roomLabel} desk summary`}>
+      <p className="legend__title">{roomLabel}</p>
+      <div className="legend__stats">
+        <div className="legend__stat">
+          <span className="legend__swatch legend__swatch--occupied" aria-hidden="true" />
+          <span className="legend__label">Occupied</span>
+          <strong className="legend__value">{occupiedCount}</strong>
+        </div>
+        <div className="legend__stat">
+          <span className="legend__swatch legend__swatch--available" aria-hidden="true" />
+          <span className="legend__label">Available</span>
+          <strong className="legend__value">{availableCount}</strong>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default Legend;
