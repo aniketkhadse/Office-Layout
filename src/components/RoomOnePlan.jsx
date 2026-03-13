@@ -37,13 +37,20 @@ const ROOM_ONE_BANKS = [
 
 const EDGE_STACK = [81, 82, 83, 84, 85, 86, 87, 88];
 
-function RoomShell({ title, className, children, furniture }) {
+function RoomShell({ title, className, children, furniture, extraDoorClasses = [] }) {
   return (
     <section className={`architect-room ${className}`}>
       {title ? <p className="architect-room__title">{title}</p> : null}
       {children}
       {furniture}
       <span className="architect-room__door" aria-hidden="true" />
+      {extraDoorClasses.map((doorClassName) => (
+        <span
+          key={doorClassName}
+          className={`architect-room__door ${doorClassName}`}
+          aria-hidden="true"
+        />
+      ))}
     </section>
   );
 }
@@ -175,7 +182,11 @@ function RoomOnePlan({ desks, onDeskClick }) {
               className="architect-room--conference"
               furniture={<ConferenceFurniture />}
             />
-            <RoomShell title="Reception" className="architect-room--support"  />
+            <RoomShell
+              title="Reception"
+              className="architect-room--support"
+              extraDoorClasses={['architect-room__door--bottom-center']}
+            />
          
             <RoomShell title="HR Cabin" className="architect-room--support" furniture={<FurnitureDesk compact />} />
           </section>
