@@ -124,9 +124,9 @@ function RoomOnePlan({ desks, onDeskClick }) {
             ))}
           </div>
 
-          <RoomShell title="Server Room" className="architect-room--plain" />
+          <RoomShell title="Ups Room" className="architect-room--plain" />
           <RoomShell
-            title="Sandeep Kotkar Cabin"
+            title="Server Room"
             className="architect-room--manager"
             furniture={<FurnitureDesk compact />}
           />
