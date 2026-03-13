@@ -1,9 +1,12 @@
 import { useEffect, useEffectEvent, useState } from 'react';
+import { DEPARTMENTS } from '../lib/deskModel';
 
 function EditDeskModal({ desk, roomLabel, onClose, onSave }) {
   const [formState, setFormState] = useState(() => ({
     employee: desk.employee,
     status: desk.status,
+    gender: desk.gender ?? '',
+    department: desk.department ?? '',
   }));
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -94,6 +97,27 @@ function EditDeskModal({ desk, roomLabel, onClose, onSave }) {
             <select name="status" value={formState.status} onChange={handleFieldChange}>
               <option value="occupied">Occupied</option>
               <option value="available">Available</option>
+            </select>
+          </label>
+
+          <label className="desk-form__field">
+            <span>Employee Gender</span>
+            <select name="gender" value={formState.gender} onChange={handleFieldChange}>
+              <option value="">Not Set</option>
+              <option value="female">Female</option>
+              <option value="male">Male</option>
+            </select>
+          </label>
+
+          <label className="desk-form__field">
+            <span>Department</span>
+            <select name="department" value={formState.department} onChange={handleFieldChange}>
+              <option value="">Not Set</option>
+              {DEPARTMENTS.map((department) => (
+                <option key={department} value={department}>
+                  {department}
+                </option>
+              ))}
             </select>
           </label>
 

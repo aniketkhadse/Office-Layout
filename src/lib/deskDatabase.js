@@ -1,3 +1,5 @@
+import { normalizeDesk, withRoomOneAdditionalDesks } from './deskModel';
+
 const STORAGE_KEY = 'office-desk-layout-editor.rooms.v3';
 const API_ENDPOINT = '/api/desk-layout';
 
@@ -15,7 +17,6 @@ function normalizeDeskEntry(entry, fallbackDesk) {
     ...entry,
     desk_id: typeof entry.desk_id === 'string' ? entry.desk_id : fallbackDesk.desk_id,
     employee: typeof entry.employee === 'string' ? entry.employee : fallbackDesk.employee,
-    status: entry.status === 'occupied' ? 'occupied' : 'available',
   };
 }
 
@@ -35,7 +36,7 @@ function normalizeRoomEntries(entries, fallbackEntries) {
       return null;
     }
 
-    return normalizeDeskEntry(entryMap.get(fallbackDesk.desk_id), fallbackDesk);
+    return normalizeDesk(normalizeDeskEntry(entryMap.get(fallbackDesk.desk_id), fallbackDesk));
   });
 }
 
@@ -45,7 +46,7 @@ function normalizeRooms(value, fallbackRooms) {
   }
 
   return {
-    room1: normalizeRoomEntries(value.room1, fallbackRooms.room1),
+    room1: withRoomOneAdditionalDesks(normalizeRoomEntries(value.room1, fallbackRooms.room1)),
     room2: normalizeRoomEntries(value.room2, fallbackRooms.room2),
   };
 }

@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postgres from 'postgres';
+import { createInitialRooms, normalizeDesk } from '../src/lib/deskModel.js';
 
 const SNAPSHOT_KEY = 'global-layout';
 const projectRoot = fileURLToPath(new URL('../', import.meta.url));
@@ -42,18 +43,6 @@ function getSql() {
   return sqlClient;
 }
 
-function normalizeDesk(desk) {
-  if (!desk) {
-    return null;
-  }
-
-  return {
-    ...desk,
-    employee: typeof desk.employee === 'string' ? desk.employee : '',
-    status: desk.status === 'occupied' ? 'occupied' : 'available',
-  };
-}
-
 async function readJsonFile(filePath) {
   return JSON.parse(await readFile(filePath, 'utf8'));
 }
@@ -66,10 +55,7 @@ async function createSeedRecord() {
 
   return {
     savedAt: '',
-    rooms: {
-      room1: roomOneSeed.map(normalizeDesk),
-      room2: roomTwoSeed.map(normalizeDesk),
-    },
+    rooms: createInitialRooms(roomOneSeed, roomTwoSeed),
   };
 }
 
@@ -87,7 +73,6 @@ function normalizeDeskEntry(entry, fallbackDesk) {
     ...entry,
     desk_id: typeof entry.desk_id === 'string' ? entry.desk_id : fallbackDesk.desk_id,
     employee: typeof entry.employee === 'string' ? entry.employee : fallbackDesk.employee,
-    status: entry.status === 'occupied' ? 'occupied' : 'available',
   };
 }
 
@@ -107,7 +92,7 @@ function normalizeRoomEntries(entries, fallbackEntries) {
       return null;
     }
 
-    return normalizeDeskEntry(entryMap.get(fallbackDesk.desk_id), fallbackDesk);
+    return normalizeDesk(normalizeDeskEntry(entryMap.get(fallbackDesk.desk_id), fallbackDesk));
   });
 }
 

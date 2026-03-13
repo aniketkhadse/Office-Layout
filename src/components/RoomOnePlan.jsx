@@ -55,16 +55,6 @@ function RoomShell({ title, className, children, furniture, extraDoorClasses = [
   );
 }
 
-function FurnitureDesk({ compact = false }) {
-  return (
-    <div className={`furniture-desk${compact ? ' furniture-desk--compact' : ''}`} aria-hidden="true">
-      <span className="furniture-desk__table" />
-      <span className="furniture-desk__screen" />
-      <span className="furniture-desk__chair" />
-    </div>
-  );
-}
-
 function ConferenceFurniture() {
   return (
     <div className="conference-furniture" aria-hidden="true">
@@ -87,7 +77,7 @@ function Aisle({ variant = 'standard' }) {
   );
 }
 
-function RoomOnePlan({ desks, onDeskClick, canEdit = true }) {
+function RoomOnePlan({ desks, onDeskClick, canEdit = true, activeDepartment = null }) {
   const deskMap = Object.fromEntries(desks.filter(Boolean).map((desk) => [desk.desk_id, desk]));
 
   function renderDesk(id, orientation = 'right') {
@@ -103,9 +93,31 @@ function RoomOnePlan({ desks, onDeskClick, canEdit = true }) {
         desk={desk}
         orientation={orientation}
         variant="room1"
+        activeDepartment={activeDepartment}
         isEditable={canEdit}
         onClick={canEdit ? () => onDeskClick(desk.desk_id) : undefined}
       />
+    );
+  }
+
+  function renderPrivateDesk(id, seatClassName) {
+    const desk = deskMap[id];
+
+    if (!desk) {
+      return null;
+    }
+
+    return (
+      <div className={`architect-room__seat ${seatClassName}`}>
+        <DeskBlock
+          desk={desk}
+          orientation="top"
+          variant="cabin"
+          activeDepartment={activeDepartment}
+          isEditable={canEdit}
+          onClick={canEdit ? () => onDeskClick(desk.desk_id) : undefined}
+        />
+      </div>
     );
   }
 
@@ -133,16 +145,11 @@ function RoomOnePlan({ desks, onDeskClick, canEdit = true }) {
           </div>
 
           <RoomShell title="Ups Room" className="architect-room--plain" />
-          <RoomShell
-            title="Server Room"
-            className="architect-room--manager"
-            furniture={<FurnitureDesk compact />}
-          />
-          <RoomShell
-            title="Himanshu Desai Cabin"
-            className="architect-room--director"
-            furniture={<FurnitureDesk />}
-          >
+          <RoomShell title="Server Room" className="architect-room--manager">
+            {renderPrivateDesk('A-1', 'architect-room__seat--server')}
+          </RoomShell>
+          <RoomShell title="Himanshu Desai Cabin" className="architect-room--director">
+            {renderPrivateDesk('A-2', 'architect-room__seat--himanshu')}
             <span className="architect-room__trim architect-room__trim--diagonal-left" aria-hidden="true" />
             <span className="architect-room__trim architect-room__trim--diagonal-right" aria-hidden="true" />
           </RoomShell>
@@ -176,8 +183,12 @@ function RoomOnePlan({ desks, onDeskClick, canEdit = true }) {
           </section>
 
           <section className="room-one-bottom" aria-label="Room 1 private rooms">
-            <RoomShell title="Sumit Kurani Cabin" className="architect-room--support" furniture={<FurnitureDesk compact />} />
-            <RoomShell title="Vishal Sartabe Cabin" className="architect-room--support" furniture={<FurnitureDesk compact />} />
+            <RoomShell title="Sumit Kurani Cabin" className="architect-room--support">
+              {renderPrivateDesk('A-3', 'architect-room__seat--sumit')}
+            </RoomShell>
+            <RoomShell title="Vishal Sartabe Cabin" className="architect-room--support">
+              {renderPrivateDesk('A-4', 'architect-room__seat--vishal')}
+            </RoomShell>
             <RoomShell
               title="Conference Room"
               className="architect-room--conference"
@@ -190,8 +201,10 @@ function RoomOnePlan({ desks, onDeskClick, canEdit = true }) {
             >
               <p className="architect-room__door--bottom-center-label">Exit Door</p>
             </RoomShell>
-         
-            <RoomShell title="HR Cabin" className="architect-room--support" furniture={<FurnitureDesk compact />} />
+
+            <RoomShell title="HR Cabin" className="architect-room--support">
+              {renderPrivateDesk('A-5', 'architect-room__seat--hr')}
+            </RoomShell>
           </section>
         </div>
       </div>

@@ -3,24 +3,13 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { createInitialRooms, normalizeDesk } from './src/lib/deskModel.js';
 
 const projectRoot = fileURLToPath(new URL('.', import.meta.url));
 const storageDir = path.join(projectRoot, 'storage');
 const storageFilePath = path.join(storageDir, 'desk-layout-db.json');
 const roomOneSeedPath = path.join(projectRoot, 'src', 'data', 'room2_desks.json');
 const roomTwoSeedPath = path.join(projectRoot, 'src', 'data', 'room1_desks.json');
-
-function normalizeDesk(desk) {
-  if (!desk) {
-    return null;
-  }
-
-  return {
-    ...desk,
-    employee: typeof desk.employee === 'string' ? desk.employee : '',
-    status: desk.status === 'occupied' ? 'occupied' : 'available',
-  };
-}
 
 async function readJsonFile(filePath) {
   const rawValue = await readFile(filePath, 'utf8');
@@ -35,10 +24,7 @@ async function createSeedRecord() {
 
   return {
     savedAt: '',
-    rooms: {
-      room1: roomOneSeed.map(normalizeDesk),
-      room2: roomTwoSeed.map(normalizeDesk),
-    },
+    rooms: createInitialRooms(roomOneSeed, roomTwoSeed),
   };
 }
 
@@ -111,7 +97,17 @@ function normalizeRecord(record, fallbackRecord) {
   return {
     savedAt: typeof record.savedAt === 'string' ? record.savedAt : fallbackRecord.savedAt,
     rooms: {
-      room1: record.rooms.room1.map(normalizeDesk),
+      room1: fallbackRecord.rooms.room1.map((fallbackDesk) => {
+        if (!fallbackDesk) {
+          return null;
+        }
+
+        const savedDesk = record.rooms.room1.find((entry) => entry?.desk_id === fallbackDesk.desk_id);
+        return normalizeDesk({
+          ...fallbackDesk,
+          ...(savedDesk ?? {}),
+        });
+      }),
       room2: record.rooms.room2.map(normalizeDesk),
     },
   };

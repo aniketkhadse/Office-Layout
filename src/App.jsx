@@ -8,33 +8,20 @@ import RoomOnePlan from './components/RoomOnePlan';
 import RoomTwoPlan from './components/RoomTwoPlan';
 import { fetchAdminSession, loginAdmin, logoutAdmin } from './lib/adminSession';
 import { loadDeskDatabase, loadDeskDatabaseSnapshot, saveDeskDatabase } from './lib/deskDatabase';
+import { createInitialRooms, DEPARTMENTS } from './lib/deskModel';
 
 const ROOM_TABS = [
   { key: 'room1', label: 'Room 1' },
   { key: 'room2', label: 'Room 2' },
 ];
 
-function normalizeDesk(desk) {
-  if (!desk) {
-    return null;
-  }
-
-  return {
-    ...desk,
-    employee: desk.employee ?? '',
-    status: desk.status === 'occupied' ? 'occupied' : 'available',
-  };
-}
-
-const initialRooms = {
-  room1: room1Source.map(normalizeDesk),
-  room2: room2Source.map(normalizeDesk),
-};
+const initialRooms = createInitialRooms(room1Source, room2Source);
 
 function App() {
   const [activeRoom, setActiveRoom] = useState('room1');
   const [rooms, setRooms] = useState(() => loadDeskDatabaseSnapshot(initialRooms));
   const [selectedDeskKey, setSelectedDeskKey] = useState(null);
+  const [selectedDepartment, setSelectedDepartment] = useState(null);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [authState, setAuthState] = useState({
     isLoading: true,
@@ -50,6 +37,17 @@ function App() {
 
   const occupiedCount = activeDesks.filter((desk) => desk?.status === 'occupied').length;
   const availableCount = activeDesks.filter((desk) => desk?.status === 'available').length;
+  const allDesks = Object.values(rooms).flat().filter(Boolean);
+  const combinedOccupiedCount = allDesks.filter((desk) => desk.status === 'occupied').length;
+  const combinedAvailableCount = allDesks.filter((desk) => desk.status === 'available').length;
+  const highlightedDepartmentCount = selectedDepartment
+    ? activeDesks.filter(
+        (desk) =>
+          desk?.status === 'occupied' &&
+          desk.employee.trim() &&
+          desk.department === selectedDepartment,
+      ).length
+    : 0;
 
   function handleRoomChange(roomKey) {
     startTransition(() => {
@@ -79,6 +77,8 @@ function App() {
           ...desk,
           employee: updatedDesk.employee.trim(),
           status: updatedDesk.status,
+          gender: updatedDesk.gender,
+          department: updatedDesk.department,
         };
       }),
     };
@@ -161,6 +161,10 @@ function App() {
     ? `Admin mode active${authState.username ? ` for ${authState.username}` : ''}. Click any desk to edit and save shared seating changes.`
     : 'View-only mode is active. Admin login is required before any desk changes can be saved.';
 
+  const departmentPanelSubtitle = selectedDepartment
+    ? `${highlightedDepartmentCount} occupied desk${highlightedDepartmentCount === 1 ? '' : 's'} highlighted in ${ROOM_TABS.find((room) => room.key === activeRoom)?.label ?? activeRoom}.`
+    : 'Click any department once to highlight it. Click the same button again to turn the filter off.';
+
   return (
     <div className="app-shell">
       <header className="app-header">
@@ -219,15 +223,54 @@ function App() {
           roomLabel={ROOM_TABS.find((room) => room.key === activeRoom)?.label ?? activeRoom}
           occupiedCount={occupiedCount}
           availableCount={availableCount}
+          combinedOccupiedCount={combinedOccupiedCount}
+          combinedAvailableCount={combinedAvailableCount}
         />
       </header>
 
       <main className="plan-stage">
-        {activeRoom === 'room1' ? (
-          <RoomOnePlan desks={activeDesks} onDeskClick={handleDeskOpen} canEdit={authState.isAdmin} />
-        ) : (
-          <RoomTwoPlan desks={activeDesks} onDeskClick={handleDeskOpen} canEdit={authState.isAdmin} />
-        )}
+        <aside className="department-panel" aria-label="Department filters">
+          <div className="department-panel__header">
+            <p className="department-panel__eyebrow">Departments</p>
+            <h2>Highlight By Team</h2>
+            <p className="department-panel__subtitle">{departmentPanelSubtitle}</p>
+          </div>
+
+          <div className="department-panel__buttons">
+            {DEPARTMENTS.map((department) => {
+              const isActive = selectedDepartment === department;
+
+              return (
+                <button
+                  key={department}
+                  type="button"
+                  className={`department-button${isActive ? ' department-button--active' : ''}`}
+                  onClick={() => setSelectedDepartment((currentValue) => (currentValue === department ? null : department))}
+                >
+                  {department}
+                </button>
+              );
+            })}
+          </div>
+        </aside>
+
+        <div className="plan-stage__canvas">
+          {activeRoom === 'room1' ? (
+            <RoomOnePlan
+              desks={activeDesks}
+              onDeskClick={handleDeskOpen}
+              canEdit={authState.isAdmin}
+              activeDepartment={selectedDepartment}
+            />
+          ) : (
+            <RoomTwoPlan
+              desks={activeDesks}
+              onDeskClick={handleDeskOpen}
+              canEdit={authState.isAdmin}
+              activeDepartment={selectedDepartment}
+            />
+          )}
+        </div>
       </main>
 
       {activeDesk ? (
