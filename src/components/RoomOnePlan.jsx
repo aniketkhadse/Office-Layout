@@ -187,7 +187,9 @@ function RoomOnePlan({ desks, onDeskClick, canEdit = true }) {
               title="Reception"
               className="architect-room--support"
               extraDoorClasses={['architect-room__door--bottom-center']}
-            />
+            >
+              <p className="architect-room__door--bottom-center-label">Exit Door</p>
+            </RoomShell>
          
             <RoomShell title="HR Cabin" className="architect-room--support" furniture={<FurnitureDesk compact />} />
           </section>

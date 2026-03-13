@@ -362,6 +362,19 @@ button {
   right: 0.1rem;
 }
 
+.architect-room__door--bottom-center-label {
+  position: absolute;
+  left: 50%;
+  bottom: 0.55rem;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 0.56rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
 .architect-room__trim {
   position: absolute;
   bottom: 0.65rem;
