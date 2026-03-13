@@ -1,10 +1,10 @@
 import { useEffect, useEffectEvent, useState } from 'react';
 
-function EditDeskModal({ desk, roomLabel, onClose, onSave }) {
-  const [formState, setFormState] = useState(() => ({
-    employee: desk.employee,
-    status: desk.status,
-  }));
+function AdminLoginModal({ isConfigured, onClose, onLogin }) {
+  const [formState, setFormState] = useState({
+    username: 'admin',
+    password: '',
+  });
   const [errorMessage, setErrorMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -36,16 +36,18 @@ function EditDeskModal({ desk, roomLabel, onClose, onSave }) {
   async function handleSubmit(event) {
     event.preventDefault();
 
+    if (!isConfigured) {
+      setErrorMessage('Admin login is not configured on the server yet.');
+      return;
+    }
+
     setIsSubmitting(true);
     setErrorMessage('');
 
     try {
-      await onSave({
-        ...desk,
-        ...formState,
-      });
+      await onLogin(formState);
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : 'Unable to save desk changes.');
+      setErrorMessage(error instanceof Error ? error.message : 'Unable to sign in.');
     } finally {
       setIsSubmitting(false);
     }
@@ -60,41 +62,33 @@ function EditDeskModal({ desk, roomLabel, onClose, onSave }) {
         }
       }}
     >
-      <section className="modal-card" role="dialog" aria-modal="true" aria-labelledby="desk-editor-title">
+      <section className="modal-card modal-card--compact" role="dialog" aria-modal="true" aria-labelledby="admin-login-title">
         <header className="modal-card__header">
           <div className="modal-card__title-group">
-            <p className="modal-card__eyebrow">{roomLabel}</p>
-            <h2 id="desk-editor-title">Edit Desk {desk.desk_id}</h2>
-            <p className="modal-card__subnote">Changes are saved for all devices after admin approval.</p>
+            <p className="modal-card__eyebrow">Admin Access</p>
+            <h2 id="admin-login-title">Sign In To Edit Desks</h2>
+            <p className="modal-card__subnote">Everyone else stays in view-only mode on this browser.</p>
           </div>
-          <button type="button" className="icon-button" onClick={onClose} aria-label="Close editor">
+          <button type="button" className="icon-button" onClick={onClose} aria-label="Close login">
             &times;
           </button>
         </header>
 
         <form className="desk-form" onSubmit={handleSubmit}>
           <label className="desk-form__field">
-            <span>Desk ID</span>
-            <input type="text" value={desk.desk_id} disabled />
+            <span>Username</span>
+            <input type="text" name="username" value={formState.username} onChange={handleFieldChange} autoComplete="username" />
           </label>
 
           <label className="desk-form__field">
-            <span>Employee Name</span>
+            <span>Password</span>
             <input
-              type="text"
-              name="employee"
-              value={formState.employee}
+              type="password"
+              name="password"
+              value={formState.password}
               onChange={handleFieldChange}
-              placeholder="Leave blank if unassigned"
+              autoComplete="current-password"
             />
-          </label>
-
-          <label className="desk-form__field">
-            <span>Status</span>
-            <select name="status" value={formState.status} onChange={handleFieldChange}>
-              <option value="occupied">Occupied</option>
-              <option value="available">Available</option>
-            </select>
           </label>
 
           {errorMessage ? <p className="modal-card__error">{errorMessage}</p> : null}
@@ -104,7 +98,7 @@ function EditDeskModal({ desk, roomLabel, onClose, onSave }) {
               Cancel
             </button>
             <button type="submit" className="button button--primary" disabled={isSubmitting}>
-              {isSubmitting ? 'Saving' : 'Save Desk'}
+              {isSubmitting ? 'Signing In' : 'Admin Login'}
             </button>
           </div>
         </form>
@@ -113,4 +107,4 @@ function EditDeskModal({ desk, roomLabel, onClose, onSave }) {
   );
 }
 
-export default EditDeskModal;
+export default AdminLoginModal;

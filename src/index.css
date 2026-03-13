@@ -67,7 +67,7 @@ button {
 
 .app-header {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) auto auto;
+  grid-template-columns: minmax(0, 1.2fr) auto auto auto;
   align-items: end;
   gap: 1rem 1.4rem;
   padding: 1rem 1.2rem;
@@ -95,6 +95,67 @@ button {
   margin: 0.28rem 0 0;
   color: var(--ink-soft);
   font-size: 0.94rem;
+}
+
+.access-panel {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 18rem;
+  padding: 0.1rem 0;
+}
+
+.access-panel__eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+.access-panel__body {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  border: 2px solid var(--ink);
+  background: #faf7f2;
+  padding: 0.55rem 0.75rem;
+}
+
+.access-panel__status {
+  min-width: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.access-panel__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-width: 5.6rem;
+  padding: 0.22rem 0.55rem;
+  border: 1px solid var(--ink);
+  background: #ece7de;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.access-panel__badge--admin {
+  background: rgba(79, 152, 44, 0.2);
+  border-color: rgba(79, 152, 44, 0.8);
+}
+
+.access-panel__text {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.82rem;
+  line-height: 1.2;
+}
+
+.access-panel__action {
+  min-width: 8.5rem;
 }
 
 .room-tabs {
@@ -548,6 +609,11 @@ button {
   overflow: visible;
   box-shadow: none;
   position: relative;
+}
+
+.desk-card:disabled,
+.desk-card--static {
+  cursor: default;
 }
 
 .desk-card--available {
@@ -1061,6 +1127,10 @@ button {
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.22);
 }
 
+.modal-card--compact {
+  width: min(100%, 440px);
+}
+
 .modal-card::after {
   content: "";
   position: absolute;
@@ -1096,6 +1166,15 @@ button {
   margin: 0.12rem 0 0;
   color: var(--ink-soft);
   font-size: 0.84rem;
+}
+
+.modal-card__error {
+  margin: 0;
+  border: 1px solid rgba(216, 57, 45, 0.35);
+  background: rgba(216, 57, 45, 0.08);
+  color: #7b1d16;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.88rem;
 }
 
 .icon-button {
@@ -1170,6 +1249,11 @@ button {
   letter-spacing: 0.06em;
 }
 
+.button:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+}
+
 .button--ghost {
   background: #f9f6f0;
 }
@@ -1185,6 +1269,7 @@ button {
     align-items: start;
   }
 
+  .access-panel,
   .legend {
     justify-self: start;
   }

@@ -87,7 +87,7 @@ function Aisle({ variant = 'standard' }) {
   );
 }
 
-function RoomOnePlan({ desks, onDeskClick }) {
+function RoomOnePlan({ desks, onDeskClick, canEdit = true }) {
   const deskMap = Object.fromEntries(desks.filter(Boolean).map((desk) => [desk.desk_id, desk]));
 
   function renderDesk(id, orientation = 'right') {
@@ -103,7 +103,8 @@ function RoomOnePlan({ desks, onDeskClick }) {
         desk={desk}
         orientation={orientation}
         variant="room1"
-        onClick={() => onDeskClick(desk.desk_id)}
+        isEditable={canEdit}
+        onClick={canEdit ? () => onDeskClick(desk.desk_id) : undefined}
       />
     );
   }

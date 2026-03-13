@@ -121,21 +121,29 @@ async function readApiRecord(fallbackRooms) {
 
 async function writeApiRecord(record) {
   if (typeof window === 'undefined') {
-    return false;
+    return;
   }
 
-  try {
-    const response = await fetch(API_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(record),
-    });
+  const response = await fetch(API_ENDPOINT, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(record),
+  });
 
-    return response.ok;
-  } catch {
-    return false;
+  if (!response.ok) {
+    let payload = null;
+
+    try {
+      payload = await response.json();
+    } catch {
+      payload = null;
+    }
+
+    throw new Error(payload?.error || 'Unable to save desk changes.');
   }
 }
 

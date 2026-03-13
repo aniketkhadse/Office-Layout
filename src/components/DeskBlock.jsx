@@ -27,14 +27,15 @@ function DeskGlyph({ status }) {
   );
 }
 
-function DeskBlock({ desk, orientation = 'right', variant = 'room1', onClick }) {
+function DeskBlock({ desk, orientation = 'right', variant = 'room1', onClick, isEditable = true }) {
   const employeeLabel = desk.employee.trim() || (desk.status === 'available' ? 'Available' : 'Unassigned');
 
   return (
     <button
       type="button"
-      className={`desk-card desk-card--${variant} desk-card--${orientation} desk-card--${desk.status}`}
+      className={`desk-card desk-card--${variant} desk-card--${orientation} desk-card--${desk.status}${isEditable ? '' : ' desk-card--static'}`}
       onClick={onClick}
+      disabled={!isEditable}
       title={`${desk.desk_id} - ${employeeLabel}`}
     >
       <span className="desk-card__content">
