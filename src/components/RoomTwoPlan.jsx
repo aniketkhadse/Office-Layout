@@ -63,7 +63,7 @@ function RoomTwoPlan({ desks, onDeskClick }) {
           </Fragment>
         ))}
       </div>
-      <footer className="room-two-footer">Door</footer>
+      <footer className="room-two-footer b">Door</footer>
     </section>
   );
 }

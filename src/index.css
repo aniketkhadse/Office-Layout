@@ -997,8 +997,12 @@ button {
   justify-content: center;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  font-size: 0.72rem;
+  font-size: 1.72rem;
   color: var(--ink-soft);
+}
+.Door{
+      padding-top: 156px;
+    padding-left: 64px;
 }
 
 .modal-backdrop {
