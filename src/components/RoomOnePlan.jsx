@@ -175,8 +175,8 @@ function RoomOnePlan({ desks, onDeskClick }) {
               className="architect-room--conference"
               furniture={<ConferenceFurniture />}
             />
-            <RoomShell title="Male Washroom" className="architect-room--support" furniture={<FurnitureDesk compact />} />
-            <RoomShell title="Female Washroom" className="architect-room--support" furniture={<FurnitureDesk compact />} />
+            <RoomShell title="Reception" className="architect-room--support"  />
+            <RoomShell title="HR Cabin" className="architect-room--support" furniture={<FurnitureDesk compact />} />
           </section>
         </div>
       </div>
