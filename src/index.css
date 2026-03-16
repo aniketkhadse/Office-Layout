@@ -362,7 +362,7 @@ button {
 
 .map-viewport__frame {
   width: 100%;
-  overflow: auto;
+  overflow: hidden;
   overscroll-behavior: auto;
   touch-action: none;
   cursor: grab;

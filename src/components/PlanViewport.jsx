@@ -129,12 +129,6 @@ function PlanViewport({ roomKey, children }) {
     }
 
     if (!event.ctrlKey && !event.metaKey) {
-      event.preventDefault();
-      window.scrollBy({
-        top: event.deltaY,
-        left: event.deltaX,
-        behavior: 'auto',
-      });
       return;
     }
 
