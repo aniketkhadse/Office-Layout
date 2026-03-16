@@ -67,10 +67,19 @@ button {
 
 .app-header {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) auto auto auto;
-  align-items: end;
-  gap: 1rem 1.4rem;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "title legend"
+    "tabs legend"
+    "access legend";
+  align-items: start;
+  gap: 0.8rem 1.2rem;
   padding: 1rem 1.2rem;
+}
+
+.app-header__title-group {
+  grid-area: title;
+  max-width: 42rem;
 }
 
 .app-header__eyebrow,
@@ -89,18 +98,24 @@ button {
   font-size: clamp(1.55rem, 2vw, 2.1rem);
   font-family: Bahnschrift, "Arial Narrow", sans-serif;
   letter-spacing: 0.02em;
+  line-height: 1.02;
 }
 
 .app-header__subtitle {
   margin: 0.28rem 0 0;
   color: var(--ink-soft);
   font-size: 0.94rem;
+  line-height: 1.35;
+  max-width: 36rem;
 }
 
 .access-panel {
+  grid-area: access;
   display: grid;
   gap: 0.45rem;
-  min-width: 18rem;
+  width: fit-content;
+  max-width: 26rem;
+  min-width: 15rem;
   padding: 0.1rem 0;
 }
 
@@ -159,9 +174,11 @@ button {
 }
 
 .room-tabs {
+  grid-area: tabs;
   display: inline-flex;
   border: 2px solid var(--ink);
   background: #f9f6f0;
+  width: fit-content;
 }
 
 .room-tab {
@@ -187,20 +204,27 @@ button {
 }
 
 .legend {
+  grid-area: legend;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.65rem;
+  align-items: flex-start;
+  gap: 0.55rem;
   justify-self: end;
+  max-width: 43rem;
 }
 
 .legend__group {
   display: grid;
-  gap: 0.45rem;
+  gap: 0.32rem;
+}
+
+.legend__group--gender {
+  min-width: 13.25rem;
 }
 
 .legend__stats {
   display: flex;
-  gap: 0.7rem;
+  gap: 0.45rem;
   flex-wrap: wrap;
 }
 
@@ -210,8 +234,8 @@ button {
   gap: 0.55rem;
   border: 2px solid var(--ink);
   background: #faf7f2;
-  padding: 0.55rem 0.75rem;
-  min-width: 9.5rem;
+  padding: 0.4rem 0.62rem;
+  min-width: 8.65rem;
 }
 
 .legend__swatch {
@@ -230,39 +254,150 @@ button {
 }
 
 .legend__label {
-  font-size: 0.84rem;
+  font-size: 0.8rem;
   color: var(--ink-soft);
 }
 
 .legend__value {
   margin-left: auto;
   font-family: Bahnschrift, "Arial Narrow", sans-serif;
-  font-size: 1.15rem;
+  font-size: 1.05rem;
+}
+
+.legend__hint {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+}
+
+.legend__mini-stats {
+  display: flex;
+  gap: 0.42rem;
+  flex-wrap: wrap;
+}
+
+.legend__mini {
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+  border: 2px solid var(--ink);
+  background: #faf7f2;
+  padding: 0.32rem 0.5rem;
+  min-width: 6rem;
+}
+
+.legend__mini-label {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.legend__mini-value {
+  margin-left: auto;
+  font-family: Bahnschrift, "Arial Narrow", sans-serif;
+  font-size: 0.98rem;
+}
+
+.legend__swatch--male {
+  background: #245fcf;
+  border-color: #1e4fa9;
+}
+
+.legend__swatch--female {
+  background: #c92f82;
+  border-color: #a81e68;
 }
 
 .plan-stage {
   flex: 1;
   padding: clamp(0.7rem, 1.4vw, 1.1rem);
   display: grid;
-  grid-template-columns: clamp(15rem, 18vw, 18.75rem) minmax(0, 1fr);
-  gap: 1rem;
+  grid-template-columns: clamp(11.1rem, 12vw, 12.6rem) minmax(0, 1fr);
+  gap: 0.8rem;
   align-items: start;
 }
 
 .plan-stage__canvas {
   min-width: 0;
+}
+
+.map-viewport {
+  width: 100%;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.map-viewport__controls {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.map-viewport__button,
+.map-viewport__zoom-readout {
+  min-height: 2rem;
+  border: 2px solid var(--ink);
+  background: #faf7f2;
+}
+
+.map-viewport__button {
+  width: 2rem;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.map-viewport__zoom-readout {
+  min-width: 4rem;
+  padding: 0.42rem 0.65rem;
+  display: grid;
+  place-items: center;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.map-viewport__frame {
+  width: 100%;
+  overflow: auto;
+  overscroll-behavior: auto;
+  touch-action: none;
+  cursor: grab;
+}
+
+.map-viewport__frame:active {
+  cursor: grabbing;
+}
+
+.map-viewport__stage {
+  position: relative;
+}
+
+.map-viewport__content {
+  position: absolute;
+  inset: 0 auto auto 0;
+  transform-origin: top left;
+}
+
+.map-viewport__content > .floor-plan {
+  width: 100%;
+  max-width: none;
+}
+
+.map-viewport__content--room2 > .floor-plan {
+  min-height: 1020px;
 }
 
 .department-panel {
   display: grid;
-  gap: 1rem;
+  gap: 0.85rem;
   align-self: stretch;
   border: 2px solid var(--ink);
   background: #faf7f2;
-  padding: 1rem;
+  padding: 0.72rem;
 }
 
 .department-panel__header {
@@ -280,29 +415,29 @@ button {
 
 .department-panel__header h2 {
   margin: 0;
-  font-size: 1.28rem;
+  font-size: 1.18rem;
   font-family: Bahnschrift, "Arial Narrow", sans-serif;
 }
 
 .department-panel__subtitle {
   margin: 0;
   color: var(--ink-soft);
-  font-size: 0.84rem;
+  font-size: 0.8rem;
   line-height: 1.32;
 }
 
 .department-panel__buttons {
   display: grid;
-  gap: 0.48rem;
+  gap: 0.36rem;
 }
 
 .department-button {
-  min-height: 2.75rem;
+  min-height: 2.2rem;
   border: 2px solid var(--ink);
   background: #fffdf8;
-  padding: 0.65rem 0.8rem;
+  padding: 0.42rem 0.6rem;
   text-align: left;
-  font-size: 0.86rem;
+  font-size: 0.76rem;
   font-weight: 600;
   line-height: 1.2;
   color: var(--ink);
@@ -341,7 +476,7 @@ button {
 .room-one-shell {
   height: 100%;
   display: grid;
-  grid-template-columns: 0.88fr 5.35fr;
+  grid-template-columns: 1fr 5.2fr;
 }
 
 .room-one-suite {
@@ -361,18 +496,48 @@ button {
 .entry-cluster__group {
   display: grid;
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: clamp(0.16rem, 0.34vw, 0.28rem);
+  gap: clamp(0.12rem, 0.26vw, 0.22rem);
 }
 
 .entry-cluster__row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) clamp(0.35rem, 0.7vw, 0.55rem) minmax(0, 1fr);
-  gap: clamp(0.15rem, 0.35vw, 0.35rem);
+  grid-template-columns: minmax(0, 1fr) clamp(0.24rem, 0.48vw, 0.38rem) minmax(0, 1fr);
+  gap: clamp(0.08rem, 0.2vw, 0.16rem);
   min-height: 0;
 }
 
 .entry-cluster__break {
   min-height: clamp(0.94rem, 3.7vw, 6.46rem);
+}
+
+.entry-cluster .desk-card__content {
+  gap: clamp(0.08rem, 0.18vw, 0.14rem);
+}
+
+.entry-cluster .desk-card__meta {
+  gap: 0.04rem;
+}
+
+.entry-cluster .desk-card__station {
+  width: clamp(2rem, 2.36vw, 2.26rem);
+  height: clamp(1.86rem, 2.12vw, 2rem);
+}
+
+.entry-cluster .desk-glyph {
+  width: clamp(1.76rem, 1.96vw, 1.92rem);
+  height: clamp(1.76rem, 1.96vw, 1.92rem);
+  --glyph-scale: 1;
+}
+
+.entry-cluster .desk-card__id {
+  font-size: clamp(0.72rem, 0.86vw, 0.96rem);
+}
+
+.entry-cluster .desk-card__name {
+  font-size: clamp(0.58rem, 0.72vw, 0.78rem);
+  line-height: 1.03;
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .entry-cluster__spine,
@@ -755,15 +920,15 @@ button {
 }
 
 .desk-card--female {
-  --employee-outline: #b52d79;
-  --employee-fill: rgba(213, 66, 145, 0.52);
-  --employee-head-fill: #ffe0f0;
+  --employee-outline: #b21871;
+  --employee-fill: #db4d9d;
+  --employee-head-fill: #db4d9d;
 }
 
 .desk-card--male {
-  --employee-outline: #245fcf;
-  --employee-fill: rgba(50, 111, 230, 0.48);
-  --employee-head-fill: #dfeaff;
+  --employee-outline: #1f57cb;
+  --employee-fill: #3973ea;
+  --employee-head-fill: #3973ea;
 }
 
 .desk-card--department-dim {
@@ -854,6 +1019,40 @@ button {
   word-break: break-word;
   text-wrap: pretty;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+.desk-card__markers {
+  display: none;
+  align-items: center;
+  gap: 0.24rem;
+}
+
+.desk-card__dot {
+  width: 0.44rem;
+  height: 0.44rem;
+  border-radius: 50%;
+  border: 1px solid rgba(23, 21, 19, 0.45);
+  background: rgba(95, 87, 75, 0.32);
+}
+
+.desk-card__dot--occupied {
+  background: var(--occupied);
+  border-color: rgba(62, 109, 33, 0.92);
+}
+
+.desk-card__dot--available {
+  background: var(--available);
+  border-color: rgba(146, 34, 26, 0.92);
+}
+
+.desk-card__dot--male {
+  background: #3973ea;
+  border-color: #1f57cb;
+}
+
+.desk-card__dot--female {
+  background: #db4d9d;
+  border-color: #b21871;
 }
 
 .desk-glyph {
@@ -1052,7 +1251,7 @@ button {
   border: 1px solid var(--employee-outline);
   border-radius: 999px 999px 10px 10px;
   background: var(--employee-fill);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  box-shadow: none;
 }
 
 .desk-glyph__head {
@@ -1064,7 +1263,7 @@ button {
   border: 1px solid var(--employee-outline);
   border-radius: 50%;
   background: var(--employee-head-fill);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  box-shadow: none;
 }
 
 .desk-glyph__head::after {
@@ -1076,7 +1275,7 @@ button {
   height: 0.18rem;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: var(--employee-outline);
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .desk-glyph--available .desk-glyph__employee {
@@ -1233,6 +1432,14 @@ button {
   position: relative;
 }
 
+.room-two-column--middle {
+  flex: 0.78 1 0;
+}
+
+.room-two-column--right {
+  flex: 0.9 1 0;
+}
+
 .room-two-column--left {
   padding-left: clamp(0.38rem, 0.56vw, 0.5rem);
 }
@@ -1261,8 +1468,8 @@ button {
 
 .room-two-walkspace {
   position: relative;
-  flex: 0 0 clamp(1.04rem, 1.62vw, 1.28rem);
-  margin-inline: clamp(0.08rem, 0.14vw, 0.12rem);
+  flex: 0 0 clamp(0.92rem, 1.28vw, 1.02rem);
+  margin-inline: clamp(0.04rem, 0.08vw, 0.08rem);
   border-left: 1px solid rgba(95, 87, 75, 0.34);
   border-right: 1px solid rgba(95, 87, 75, 0.34);
   background: linear-gradient(90deg, rgba(249, 245, 236, 0.22), rgba(227, 220, 205, 0.9) 50%, rgba(249, 245, 236, 0.22));
@@ -1272,8 +1479,12 @@ button {
 }
 
 .room-two-walkspace--middle {
-  flex-basis: clamp(0.56rem, 0.82vw, 0.72rem);
-  margin-inline: clamp(0.02rem, 0.05vw, 0.05rem);
+  flex-basis: clamp(0.14rem, 0.18vw, 0.18rem);
+  margin-inline: 0;
+  border-left: 0;
+  border-right: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .room-two-walkspace__line {
@@ -1282,6 +1493,10 @@ button {
   right: 0;
   width: clamp(0.26rem, 0.46vw, 0.36rem);
   display: block;
+}
+
+.room-two-walkspace--middle .room-two-walkspace__line {
+  display: none;
 }
 
 .room-two-cell {
@@ -1475,6 +1690,11 @@ button {
 @media (max-width: 1080px) {
   .app-header {
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "title"
+      "tabs"
+      "access"
+      "legend";
     align-items: start;
   }
 
@@ -1488,7 +1708,7 @@ button {
   }
 }
 
-@media (max-width: 760px) {
+@media (max-width: 768px) {
   .app-shell {
     padding: 0.7rem;
   }
@@ -1510,6 +1730,10 @@ button {
     flex: 1 1 11rem;
   }
 
+  .legend__mini {
+    flex: 1 1 7rem;
+  }
+
   .plan-stage {
     padding: 0.55rem;
   }
@@ -1518,77 +1742,17 @@ button {
     padding: 0.8rem;
   }
 
-  .floor-plan--room1 {
-    aspect-ratio: 1 / 1.34;
+  .map-viewport__frame {
+    min-height: min(72svh, 42rem);
+    border: 2px solid var(--ink);
+    background: #f6f1e7;
   }
 
-  .room-one-shell {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+  .map-viewport__controls {
+    justify-content: space-between;
   }
 
-  .room-one-suite {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-rows: none;
-    border-right: 0;
-    border-bottom: 4px solid var(--wall);
-  }
-
-  .entry-cluster {
-    border-bottom: 0;
-    border-right: 4px solid var(--wall);
-  }
-
-  .architect-room {
-    border-bottom: 0;
-    border-right: 4px solid var(--wall);
-    min-height: 7rem;
-  }
-
-  .room-one-suite .architect-room:last-child {
-    border-right: 0;
-  }
-
-  .room-one-banks {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-auto-rows: minmax(0, 1fr);
-    gap: 0.55rem;
-    padding: 0.55rem;
-  }
-
-  .room-one-aisle {
-    display: none;
-  }
-
-  .edge-stack {
-    grid-column: span 2;
-    grid-template-columns: clamp(0.4rem, 0.7vw, 0.6rem) minmax(0, 1fr);
-  }
-
-  .edge-stack__column {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-rows: repeat(2, minmax(0, 1fr));
-  }
-
-  .room-one-bottom {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-auto-rows: minmax(7rem, auto);
-  }
-
-  .room-one-bottom .architect-room--conference {
-    grid-column: span 2;
-  }
-
-  .floor-plan--room2 {
-    min-height: 780px;
-  }
-
-  .room-two-grid {
-    padding: 0.35rem 0.2rem 0.2rem;
-  }
-
-  .room-two-walkspace {
-    flex-basis: clamp(0.7rem, 1.2vw, 0.9rem);
+  .map-viewport__zoom-readout {
+    min-width: 4.5rem;
   }
 }

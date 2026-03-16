@@ -4,6 +4,8 @@ function Legend({
   availableCount,
   combinedOccupiedCount,
   combinedAvailableCount,
+  maleCount,
+  femaleCount,
 }) {
   return (
     <section className="legend" aria-label={`${roomLabel} desk summary`}>
@@ -35,6 +37,23 @@ function Legend({
             <span className="legend__swatch legend__swatch--available" aria-hidden="true" />
             <span className="legend__label">Available</span>
             <strong className="legend__value">{combinedAvailableCount}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div className="legend__group legend__group--gender">
+        <p className="legend__title">Employee Colors</p>
+        <p className="legend__hint">Blue = Male, Pink = Female</p>
+        <div className="legend__mini-stats">
+          <div className="legend__mini">
+            <span className="legend__swatch legend__swatch--male" aria-hidden="true" />
+            <span className="legend__mini-label">Male</span>
+            <strong className="legend__mini-value">{maleCount}</strong>
+          </div>
+          <div className="legend__mini">
+            <span className="legend__swatch legend__swatch--female" aria-hidden="true" />
+            <span className="legend__mini-label">Female</span>
+            <strong className="legend__mini-value">{femaleCount}</strong>
           </div>
         </div>
       </div>

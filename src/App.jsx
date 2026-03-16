@@ -4,6 +4,7 @@ import room1Source from './data/room2_desks.json';
 import AdminLoginModal from './components/AdminLoginModal';
 import EditDeskModal from './components/EditDeskModal';
 import Legend from './components/Legend';
+import PlanViewport from './components/PlanViewport';
 import RoomOnePlan from './components/RoomOnePlan';
 import RoomTwoPlan from './components/RoomTwoPlan';
 import { fetchAdminSession, loginAdmin, logoutAdmin } from './lib/adminSession';
@@ -37,6 +38,8 @@ function App() {
 
   const occupiedCount = activeDesks.filter((desk) => desk?.status === 'occupied').length;
   const availableCount = activeDesks.filter((desk) => desk?.status === 'available').length;
+  const maleCount = activeDesks.filter((desk) => desk?.status === 'occupied' && desk.gender === 'male').length;
+  const femaleCount = activeDesks.filter((desk) => desk?.status === 'occupied' && desk.gender === 'female').length;
   const allDesks = Object.values(rooms).flat().filter(Boolean);
   const combinedOccupiedCount = allDesks.filter((desk) => desk.status === 'occupied').length;
   const combinedAvailableCount = allDesks.filter((desk) => desk.status === 'available').length;
@@ -225,6 +228,8 @@ function App() {
           availableCount={availableCount}
           combinedOccupiedCount={combinedOccupiedCount}
           combinedAvailableCount={combinedAvailableCount}
+          maleCount={maleCount}
+          femaleCount={femaleCount}
         />
       </header>
 
@@ -255,21 +260,23 @@ function App() {
         </aside>
 
         <div className="plan-stage__canvas">
-          {activeRoom === 'room1' ? (
-            <RoomOnePlan
-              desks={activeDesks}
-              onDeskClick={handleDeskOpen}
-              canEdit={authState.isAdmin}
-              activeDepartment={selectedDepartment}
-            />
-          ) : (
-            <RoomTwoPlan
-              desks={activeDesks}
-              onDeskClick={handleDeskOpen}
-              canEdit={authState.isAdmin}
-              activeDepartment={selectedDepartment}
-            />
-          )}
+          <PlanViewport key={activeRoom} roomKey={activeRoom}>
+            {activeRoom === 'room1' ? (
+              <RoomOnePlan
+                desks={activeDesks}
+                onDeskClick={handleDeskOpen}
+                canEdit={authState.isAdmin}
+                activeDepartment={selectedDepartment}
+              />
+            ) : (
+              <RoomTwoPlan
+                desks={activeDesks}
+                onDeskClick={handleDeskOpen}
+                canEdit={authState.isAdmin}
+                activeDepartment={selectedDepartment}
+              />
+            )}
+          </PlanViewport>
         </div>
       </main>
 

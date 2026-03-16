@@ -60,6 +60,10 @@ function DeskBlock({
         <span className="desk-card__meta">
           <span className="desk-card__id">{desk.desk_id}</span>
           <span className="desk-card__name">{employeeLabel}</span>
+          <span className="desk-card__markers" aria-hidden="true">
+            <span className={`desk-card__dot desk-card__dot--${desk.status}`} />
+            {desk.gender ? <span className={`desk-card__dot desk-card__dot--${desk.gender}`} /> : null}
+          </span>
         </span>
         <span className="desk-card__station" aria-hidden="true">
           <span className="desk-card__status" />
