@@ -43,6 +43,8 @@ function App() {
   const allDesks = Object.values(rooms).flat().filter(Boolean);
   const combinedOccupiedCount = allDesks.filter((desk) => desk.status === 'occupied').length;
   const combinedAvailableCount = allDesks.filter((desk) => desk.status === 'available').length;
+  const combinedMaleCount = allDesks.filter((desk) => desk.status === 'occupied' && desk.gender === 'male').length;
+  const combinedFemaleCount = allDesks.filter((desk) => desk.status === 'occupied' && desk.gender === 'female').length;
   const highlightedDepartmentCount = selectedDepartment
     ? activeDesks.filter(
         (desk) =>
@@ -230,6 +232,8 @@ function App() {
           combinedAvailableCount={combinedAvailableCount}
           maleCount={maleCount}
           femaleCount={femaleCount}
+          combinedMaleCount={combinedMaleCount}
+          combinedFemaleCount={combinedFemaleCount}
         />
       </header>
 
