@@ -298,13 +298,13 @@ button {
 }
 
 .legend__swatch--male {
-  background: #245fcf;
-  border-color: #1e4fa9;
+  background: #2323ff;
+  border-color: #2323ff;
 }
 
 .legend__swatch--female {
-  background: #c92f82;
-  border-color: #a81e68;
+  background: #ff13f0;
+  border-color: #ff13f0;
 }
 
 .plan-stage {
@@ -920,15 +920,15 @@ button {
 }
 
 .desk-card--female {
-  --employee-outline: #b21871;
-  --employee-fill: #db4d9d;
-  --employee-head-fill: #db4d9d;
+  --employee-outline: #ff13f0;
+  --employee-fill: #ff13f0;
+  --employee-head-fill: #ff13f0;
 }
 
 .desk-card--male {
-  --employee-outline: #1f57cb;
-  --employee-fill: #3973ea;
-  --employee-head-fill: #3973ea;
+  --employee-outline: #2323ff;
+  --employee-fill: #2323ff;
+  --employee-head-fill: #2323ff;
 }
 
 .desk-card--department-dim {
@@ -1046,13 +1046,13 @@ button {
 }
 
 .desk-card__dot--male {
-  background: #3973ea;
-  border-color: #1f57cb;
+  background: #2323ff;
+  border-color: #2323ff;
 }
 
 .desk-card__dot--female {
-  background: #db4d9d;
-  border-color: #b21871;
+  background: #ff13f0;
+  border-color: #ff13f0;
 }
 
 .desk-glyph {
@@ -1276,6 +1276,11 @@ button {
   transform: translate(-50%, -50%);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.92);
+}
+
+.desk-card--female .desk-glyph__head::after,
+.desk-card--male .desk-glyph__head::after {
+  opacity: 0;
 }
 
 .desk-glyph--available .desk-glyph__employee {

@@ -33,6 +33,10 @@ function getTouchPoint(viewport, touchA, touchB) {
   };
 }
 
+function isInteractiveTarget(target) {
+  return target instanceof Element && Boolean(target.closest('button, input, select, textarea, a, [role="button"]'));
+}
+
 function PlanViewport({ roomKey, children }) {
   const viewportRef = useRef(null);
   const scaleRef = useRef(1);
@@ -162,6 +166,11 @@ function PlanViewport({ roomKey, children }) {
     }
 
     if (event.touches.length === 1) {
+      if (isInteractiveTarget(event.target)) {
+        touchStateRef.current = { mode: null };
+        return;
+      }
+
       touchStateRef.current = {
         mode: 'pan',
         x: event.touches[0].clientX,
@@ -221,6 +230,10 @@ function PlanViewport({ roomKey, children }) {
 
   function handlePointerDown(event) {
     if (event.pointerType !== 'mouse' || event.button !== 0) {
+      return;
+    }
+
+    if (isInteractiveTarget(event.target)) {
       return;
     }
 
