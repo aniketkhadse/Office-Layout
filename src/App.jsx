@@ -54,6 +54,26 @@ function App() {
       ).length
     : 0;
 
+  const departmentMaleCount = selectedDepartment
+    ? activeDesks.filter(
+        (desk) =>
+          desk?.status === 'occupied' &&
+          desk.employee.trim() &&
+          desk.department === selectedDepartment &&
+          desk.gender === 'male',
+      ).length
+    : 0;
+
+  const departmentFemaleCount = selectedDepartment
+    ? activeDesks.filter(
+        (desk) =>
+          desk?.status === 'occupied' &&
+          desk.employee.trim() &&
+          desk.department === selectedDepartment &&
+          desk.gender === 'female',
+      ).length
+    : 0;
+
   function handleRoomChange(roomKey) {
     startTransition(() => {
       setActiveRoom(roomKey);
@@ -168,7 +188,7 @@ function App() {
 
   const departmentPanelSubtitle = selectedDepartment
     ? `${highlightedDepartmentCount} occupied desk${highlightedDepartmentCount === 1 ? '' : 's'} highlighted in ${ROOM_TABS.find((room) => room.key === activeRoom)?.label ?? activeRoom}.`
-    : 'Click any department once to highlight it. Click the same button again to turn the filter off.';
+    : 'Select a department below to highlight it on the floor plan.';
 
   return (
     <div className="app-shell">
@@ -245,21 +265,40 @@ function App() {
             <p className="department-panel__subtitle">{departmentPanelSubtitle}</p>
           </div>
 
-          <div className="department-panel__buttons">
-            {DEPARTMENTS.map((department) => {
-              const isActive = selectedDepartment === department;
-
-              return (
-                <button
-                  key={department}
-                  type="button"
-                  className={`department-button${isActive ? ' department-button--active' : ''}`}
-                  onClick={() => setSelectedDepartment((currentValue) => (currentValue === department ? null : department))}
-                >
+          <div className="department-panel__body">
+            <select
+              className="department-select input"
+              value={selectedDepartment || ''}
+              onChange={(e) => setSelectedDepartment(e.target.value || null)}
+              aria-label="Select department to highlight"
+            >
+              <option value="">-- No Department Filter --</option>
+              {DEPARTMENTS.map((department) => (
+                <option key={department} value={department}>
                   {department}
-                </button>
-              );
-            })}
+                </option>
+              ))}
+            </select>
+
+            {selectedDepartment && (
+              <div className="department-metrics">
+                <p className="department-metrics__title">{selectedDepartment} Stats</p>
+                <div className="department-metrics__grid">
+                  <div className="department-metrics__stat department-metrics__stat--total">
+                    <span className="department-metrics__label">Total</span>
+                    <strong className="department-metrics__value">{highlightedDepartmentCount}</strong>
+                  </div>
+                  <div className="department-metrics__stat department-metrics__stat--male">
+                    <span className="department-metrics__label">Male</span>
+                    <strong className="department-metrics__value">{departmentMaleCount}</strong>
+                  </div>
+                  <div className="department-metrics__stat department-metrics__stat--female">
+                    <span className="department-metrics__label">Female</span>
+                    <strong className="department-metrics__value">{departmentFemaleCount}</strong>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </aside>
 
